@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Hustle</string>
+
     <string name="main_change">Change</string>
     <string name="main_play">Play</string>
     <string name="main_reset">Reset</string>
+    <string name="main_pause">Pause</string>
 </resources>
