@@ -1,10 +1,11 @@
-package me.cpele.hustle
+package me.cpele.hustle.app
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import me.cpele.hustle.R
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
