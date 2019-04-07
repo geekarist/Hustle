@@ -3,7 +3,6 @@ package me.cpele.hustle.app
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import me.cpele.hustle.R
@@ -13,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel by lazy {
         ViewModelProviders.of(
             this,
-            ViewModelProvider.AndroidViewModelFactory(application)
+            CustomApplication.instance.mainViewModelFactory
         ).get(MainViewModel::class.java)
     }
 

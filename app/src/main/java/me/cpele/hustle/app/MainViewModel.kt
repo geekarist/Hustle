@@ -1,12 +1,14 @@
 package me.cpele.hustle.app
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import me.cpele.hustle.R
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import me.cpele.hustle.domain.TogglePlayPauseUseCase
 
-class MainViewModel(private val app: Application) : AndroidViewModel(app) {
+class MainViewModel(
+    private val togglePlayPauseUseCase: TogglePlayPauseUseCase
+) : ViewModel() {
 
     private val _strTimeData =
         MutableLiveData<String>().apply { value = "00:00" }
@@ -20,12 +22,18 @@ class MainViewModel(private val app: Application) : AndroidViewModel(app) {
     fun onTogglePlayPause() {
         val wasPlaying = isPlayingData.value == true
 
-        val isPlaying = !wasPlaying
-        val label =
-            if (isPlaying) app.getString(R.string.main_pause)
-            else app.getString(R.string.main_play)
+        val request = TogglePlayPauseUseCase.Request(wasPlaying)
+        val response = togglePlayPauseUseCase.execute(request)
 
-        isPlayingData.value = isPlaying
-        _playPauseLabelData.value = label
+        isPlayingData.value = response.playing
+        _playPauseLabelData.value = response.label
+    }
+
+    class Factory(
+        private val togglePlayPauseUseCase: TogglePlayPauseUseCase
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return modelClass.cast(MainViewModel(togglePlayPauseUseCase)) as T
+        }
     }
 }
