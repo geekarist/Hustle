@@ -4,10 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import me.cpele.hustle.R
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private val _strTimeData =
         MutableLiveData<String>().apply { value = "00:00" }
@@ -15,12 +14,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val isPlayingData = MutableLiveData<Boolean>().apply { value = false }
 
-    val playPauseLabelData: LiveData<String> = Transformations.map(isPlayingData) {
-        if (it) application.getString(R.string.main_pause)
-        else application.getString(R.string.main_play)
-    }
+    private val _playPauseLabelData = MutableLiveData<String>()
+    val playPauseLabelData: LiveData<String> get() = _playPauseLabelData
 
     fun onTogglePlayPause() {
         isPlayingData.value = isPlayingData.value != true
+        val isPlaying = isPlayingData.value == true
+        _playPauseLabelData.value =
+            if (isPlaying) app.getString(R.string.main_pause)
+            else app.getString(R.string.main_play)
     }
 }
