@@ -18,10 +18,14 @@ class MainViewModel(private val app: Application) : AndroidViewModel(app) {
     val playPauseLabelData: LiveData<String> get() = _playPauseLabelData
 
     fun onTogglePlayPause() {
-        isPlayingData.value = isPlayingData.value != true
-        val isPlaying = isPlayingData.value == true
-        _playPauseLabelData.value =
+        val wasPlaying = isPlayingData.value == true
+
+        val isPlaying = !wasPlaying
+        val label =
             if (isPlaying) app.getString(R.string.main_pause)
             else app.getString(R.string.main_play)
+
+        isPlayingData.value = isPlaying
+        _playPauseLabelData.value = label
     }
 }
