@@ -1,20 +1,22 @@
 package me.cpele.hustle.app
 
 import android.app.Application
-import me.cpele.hustle.domain.TogglePlayPauseUseCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import me.cpele.hustle.domain.EggTimer
 
 class CustomApplication : Application() {
 
-    private val androidStringProvider: TogglePlayPauseUseCase.StringProvider by lazy {
+    private val androidStringProvider: EggTimer.StringProvider by lazy {
         AndroidStringProvider(this)
     }
 
-    private val togglePlayPauseUseCase: TogglePlayPauseUseCase by lazy {
-        TogglePlayPauseUseCase(androidStringProvider)
+    private val eggTimerFactory: EggTimer.Factory by lazy {
+        EggTimer.Factory(androidStringProvider)
     }
 
+    @ExperimentalCoroutinesApi
     val mainViewModelFactory by lazy {
-        MainViewModel.Factory(togglePlayPauseUseCase)
+        MainViewModel.Factory(eggTimerFactory)
     }
 
     override fun onCreate() {

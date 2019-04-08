@@ -1,14 +1,14 @@
 package me.cpele.hustle.app
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import me.cpele.hustle.domain.TogglePlayPauseUseCase
+import androidx.lifecycle.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import me.cpele.hustle.domain.EggTimer
 
-class MainViewModel(
-    private val togglePlayPauseUseCase: TogglePlayPauseUseCase
-) : ViewModel() {
+@ExperimentalCoroutinesApi
+class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
+
+    private val eggTimer = eggTimerFactory.create()
 
     private val _strTimeData =
         MutableLiveData<String>().apply { value = "00:00" }
@@ -19,21 +19,28 @@ class MainViewModel(
     private val _playPauseLabelData = MutableLiveData<String>()
     val playPauseLabelData: LiveData<String> get() = _playPauseLabelData
 
-    fun onTogglePlayPause() {
-        val wasPlaying = isPlayingData.value == true
+    init {
+        viewModelScope.launch {
+            for (state in eggTimer.channel) {
+                _strTimeData.value = state.timeStr
+                isPlayingData.value = state.isPlaying
+                _playPauseLabelData.value = state.playPauseLabel
+            }
+        }
+    }
 
-        val request = TogglePlayPauseUseCase.Request(wasPlaying)
-        val response = togglePlayPauseUseCase.execute(request)
+    fun onTogglePlayPause() = eggTimer.toggle()
 
-        isPlayingData.value = response.playing
-        _playPauseLabelData.value = response.label
+    override fun onCleared() {
+        super.onCleared()
+        eggTimer.channel.cancel()
     }
 
     class Factory(
-        private val togglePlayPauseUseCase: TogglePlayPauseUseCase
+        private val eggTimerFactory: EggTimer.Factory
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return modelClass.cast(MainViewModel(togglePlayPauseUseCase)) as T
+            return modelClass.cast(MainViewModel(eggTimerFactory)) as T
         }
     }
 }

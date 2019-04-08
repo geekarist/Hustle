@@ -3,7 +3,8 @@ apply plugin: 'kotlin'
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    // No dependency, pure Kotlin
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
+    // No dependency except kotlin and kotlinx
 }
 
 sourceCompatibility = "7"

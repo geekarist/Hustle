@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import me.cpele.hustle.R
 
+@ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by lazy {
