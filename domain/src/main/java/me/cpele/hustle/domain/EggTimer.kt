@@ -17,24 +17,27 @@ class EggTimer(private val stringProvider: StringProvider) : CoroutineScope {
     private val label: String
         get() = if (isPlaying) stringProvider.mainPause else stringProvider.mainPlay
 
+    var remainingMillis: Long = 0
+
     @ExperimentalCoroutinesApi
     val channel: ReceiveChannel<State> = produce {
         val timer = Timer()
         invokeOnClose {
             timer.cancel()
         }
-        val intervalMsec: Long = 500
+        val intervalMillis: Long = 1000
         val timerTask = timerTask {
             launch {
+                if (isPlaying) remainingMillis -= intervalMillis
                 val state = State(
-                    System.currentTimeMillis().toString(),
+                    remainingMillis.toString(),
                     isPlaying,
                     label
                 )
                 send(state)
             }
         }
-        timer.scheduleAtFixedRate(timerTask, 0, intervalMsec)
+        timer.scheduleAtFixedRate(timerTask, 0, intervalMillis)
         delay(Long.MAX_VALUE)
     }
 

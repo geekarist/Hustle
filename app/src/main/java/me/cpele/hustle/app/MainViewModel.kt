@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import me.cpele.hustle.domain.EggTimer
+import java.util.concurrent.TimeUnit
 
 @ExperimentalCoroutinesApi
 class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
@@ -20,6 +21,8 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
     val playPauseLabelData: LiveData<String> get() = _playPauseLabelData
 
     init {
+        eggTimer.remainingMillis = TimeUnit.MINUTES.toMillis(1)
+
         viewModelScope.launch {
             for (state in eggTimer.channel) {
                 _strTimeData.value = state.timeStr
