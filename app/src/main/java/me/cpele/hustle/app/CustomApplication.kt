@@ -10,8 +10,12 @@ class CustomApplication : Application() {
         AndroidStringProvider(this)
     }
 
+    private val androidTimeFormatting: EggTimer.TimeFormatting by lazy {
+        AndroidTimeFormatting()
+    }
+
     private val eggTimerFactory: EggTimer.Factory by lazy {
-        EggTimer.Factory(androidStringProvider)
+        EggTimer.Factory(androidStringProvider, androidTimeFormatting)
     }
 
     @ExperimentalCoroutinesApi

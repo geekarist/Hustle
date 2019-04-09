@@ -7,7 +7,10 @@ import java.util.*
 import kotlin.concurrent.timerTask
 import kotlin.coroutines.CoroutineContext
 
-class EggTimer(private val stringProvider: StringProvider) : CoroutineScope {
+class EggTimer(
+    private val stringProvider: StringProvider,
+    private val timeFormatting: TimeFormatting
+) : CoroutineScope {
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Default
@@ -30,7 +33,7 @@ class EggTimer(private val stringProvider: StringProvider) : CoroutineScope {
             launch {
                 if (isPlaying) remainingMillis -= intervalMillis
                 val state = State(
-                    remainingMillis.toString(),
+                    timeFormatting.apply(remainingMillis),
                     isPlaying,
                     label
                 )
@@ -56,7 +59,15 @@ class EggTimer(private val stringProvider: StringProvider) : CoroutineScope {
         val mainPlay: String
     }
 
-    class Factory(private val stringProvider: StringProvider) {
-        fun create(): EggTimer = EggTimer(stringProvider)
+    interface TimeFormatting {
+        fun apply(timeMillis: Long): String
+    }
+
+    class Factory(
+        private val stringProvider: StringProvider,
+        private val timeFormatting: TimeFormatting
+    ) {
+        fun create(): EggTimer = EggTimer(stringProvider, timeFormatting)
+
     }
 }
