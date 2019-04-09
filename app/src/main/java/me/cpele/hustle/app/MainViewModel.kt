@@ -32,8 +32,8 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
     fun onTogglePlayPause() = eggTimer.toggle()
 
     override fun onCleared() {
-        super.onCleared()
         eggTimer.channel.cancel()
+        super.onCleared()
     }
 
     class Factory(

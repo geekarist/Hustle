@@ -1,11 +1,8 @@
 package me.cpele.hustle.domain
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.produce
-import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
 import kotlin.coroutines.CoroutineContext
@@ -23,7 +20,9 @@ class EggTimer(private val stringProvider: StringProvider) : CoroutineScope {
     @ExperimentalCoroutinesApi
     val channel: ReceiveChannel<State> = produce {
         val timer = Timer()
-        invokeOnClose { timer.cancel() }
+        invokeOnClose {
+            timer.cancel()
+        }
         val intervalMsec: Long = 500
         val timerTask = timerTask {
             launch {
@@ -36,6 +35,7 @@ class EggTimer(private val stringProvider: StringProvider) : CoroutineScope {
             }
         }
         timer.scheduleAtFixedRate(timerTask, 0, intervalMsec)
+        delay(Long.MAX_VALUE)
     }
 
     fun toggle() {
