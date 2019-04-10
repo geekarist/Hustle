@@ -50,7 +50,7 @@ class EggTimer(
     }
 
     fun reset() {
-        remainingMillis = TimeUnit.MINUTES.toMillis(1)
+        remainingMillis = 0
         isPlaying = false
     }
 
