@@ -10,8 +10,7 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
 
     private val eggTimer = eggTimerFactory.create()
 
-    private val _strTimeData =
-        MutableLiveData<String>().apply { value = "00:00" }
+    private val _strTimeData = MutableLiveData<String>()
     val strTimeData: LiveData<String> get() = _strTimeData
 
     private val isPlayingData = MutableLiveData<Boolean>().apply { value = false }
