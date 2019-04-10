@@ -33,6 +33,7 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
     }
 
     fun onTogglePlayPause() = eggTimer.toggle()
+    fun onReset() = eggTimer.reset()
 
     override fun onCleared() {
         eggTimer.channel.cancel()

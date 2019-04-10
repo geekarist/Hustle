@@ -4,6 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.produce
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.timerTask
 import kotlin.coroutines.CoroutineContext
 
@@ -48,6 +49,11 @@ class EggTimer(
         isPlaying = !isPlaying
     }
 
+    fun reset() {
+        remainingMillis = TimeUnit.MINUTES.toMillis(1)
+        isPlaying = false
+    }
+
     data class State(
         val timeStr: String,
         val isPlaying: Boolean,
@@ -68,6 +74,5 @@ class EggTimer(
         private val timeFormatting: TimeFormatting
     ) {
         fun create(): EggTimer = EggTimer(stringProvider, timeFormatting)
-
     }
 }

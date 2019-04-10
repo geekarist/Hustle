@@ -30,8 +30,7 @@ class MainActivity : AppCompatActivity() {
             main_play_pause_button.text = it
         })
 
-        main_play_pause_button.setOnClickListener {
-            viewModel.onTogglePlayPause()
-        }
+        main_play_pause_button.setOnClickListener { viewModel.onTogglePlayPause() }
+        main_reset_button.setOnClickListener { viewModel.onReset() }
     }
 }
