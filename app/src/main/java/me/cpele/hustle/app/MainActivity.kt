@@ -44,5 +44,10 @@ class MainActivity : AppCompatActivity() {
                 true
             ).show()
         }
+
+        main_send_button.setOnClickListener {
+            // TODO: Display animated snackbar "♺ sending to beeminder: HH:MM"
+            // TODO: Display snackbar "✔ sending to beeminder: HH:MM"
+        }
     }
 }

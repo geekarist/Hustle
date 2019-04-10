@@ -22,6 +22,7 @@ class EggTimer(
         get() = if (isPlaying) stringProvider.mainPause else stringProvider.mainPlay
 
     var remainingMillis: Long = 0
+    private var elapsedMillis: Long = 0
 
     @ExperimentalCoroutinesApi
     val channel: ReceiveChannel<State> = produce {
@@ -32,7 +33,10 @@ class EggTimer(
         val intervalMillis: Long = 1000
         val timerTask = timerTask {
             launch {
-                if (isPlaying) remainingMillis -= intervalMillis
+                if (isPlaying) {
+                    remainingMillis -= intervalMillis
+                    elapsedMillis += intervalMillis
+                }
                 val state = State(
                     timeFormatting.apply(remainingMillis),
                     isPlaying,
@@ -51,6 +55,7 @@ class EggTimer(
 
     fun reset() {
         remainingMillis = 0
+        elapsedMillis = 0
         isPlaying = false
     }
 
