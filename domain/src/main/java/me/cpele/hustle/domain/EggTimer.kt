@@ -54,6 +54,11 @@ class EggTimer(
         isPlaying = false
     }
 
+    fun changeDuration(hourOfDay: Int, minute: Int) {
+        remainingMillis =
+            TimeUnit.HOURS.toMillis(hourOfDay.toLong()) + TimeUnit.MINUTES.toMillis(minute.toLong())
+    }
+
     data class State(
         val timeStr: String,
         val isPlaying: Boolean,

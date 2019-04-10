@@ -1,5 +1,6 @@
 package me.cpele.hustle.app
 
+import android.app.TimePickerDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -32,5 +33,16 @@ class MainActivity : AppCompatActivity() {
 
         main_play_pause_button.setOnClickListener { viewModel.onTogglePlayPause() }
         main_reset_button.setOnClickListener { viewModel.onReset() }
+        main_change_button.setOnClickListener {
+            TimePickerDialog(
+                this,
+                { _, hourOfDay, minute ->
+                    viewModel.onChangeDuration(hourOfDay, minute)
+                },
+                0,
+                0,
+                true
+            ).show()
+        }
     }
 }

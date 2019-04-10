@@ -40,6 +40,10 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
         super.onCleared()
     }
 
+    fun onChangeDuration(hour: Int, minute: Int) {
+        eggTimer.changeDuration(hour, minute)
+    }
+
     class Factory(
         private val eggTimerFactory: EggTimer.Factory
     ) : ViewModelProvider.Factory {
