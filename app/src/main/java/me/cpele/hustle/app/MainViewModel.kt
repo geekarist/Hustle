@@ -2,6 +2,7 @@ package me.cpele.hustle.app
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.cpele.hustle.domain.EggTimer
 
@@ -20,6 +21,9 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
 
     private val _elapsedTimeStr = MutableLiveData<String>()
     val elapsedTimeStr: LiveData<String> = _elapsedTimeStr
+
+    private val _dataPointSentEvent = MutableLiveData<LiveEvent<Unit>>()
+    val dataPointSentEvent: LiveData<LiveEvent<Unit>> = _dataPointSentEvent
 
     init {
         viewModelScope.launch {
@@ -42,6 +46,11 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
 
     fun onChangeDuration(hour: Int, minute: Int) {
         eggTimer.changeDuration(hour, minute)
+    }
+
+    fun sendDataPoint() = viewModelScope.launch {
+        delay(3000)
+        _dataPointSentEvent.postValue(LiveEvent(Unit))
     }
 
     class Factory(

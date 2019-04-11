@@ -32,8 +32,18 @@ class MainActivity : AppCompatActivity() {
             main_play_pause_button.text = it
         })
 
-        viewModel.elapsedTimeStr.observe(this, Observer { it: String ->
+        viewModel.elapsedTimeStr.observe(this, Observer {
             main_send_button.text = getString(R.string.main_send_elapsed, it)
+        })
+
+        viewModel.dataPointSentEvent.observe(this, Observer {
+            it.unconsumed?.apply {
+                val msgDataPointSent = getString(
+                    R.string.main_data_point_sent,
+                    viewModel.elapsedTimeStr.value
+                )
+                Snackbar.make(main_container, msgDataPointSent, Snackbar.LENGTH_SHORT).show()
+            }
         })
 
         main_play_pause_button.setOnClickListener { viewModel.onTogglePlayPause() }
@@ -51,12 +61,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         main_send_button.setOnClickListener {
-            val msgSending = getString(
+            val msgSendingDataPoint = getString(
                 R.string.main_sending_data_point,
                 viewModel.elapsedTimeStr.value
             )
-            Snackbar.make(it, msgSending, Snackbar.LENGTH_SHORT).show()
-            // TODO: Display snackbar "Data point sent: HH:MM"
+            Snackbar.make(main_container, msgSendingDataPoint, Snackbar.LENGTH_SHORT).show()
+            viewModel.sendDataPoint()
         }
     }
 }
