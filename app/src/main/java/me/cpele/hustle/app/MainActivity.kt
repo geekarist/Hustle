@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import me.cpele.hustle.R
@@ -50,9 +51,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         main_send_button.setOnClickListener {
-            // TODO: Cf. chrome download UX
-            // TODO: Display animated snackbar "♺ sending to beeminder: HH:MM"
-            // TODO: Display snackbar "✔ sending to beeminder: HH:MM"
+            val msgSending = getString(
+                R.string.main_sending_data_point,
+                viewModel.elapsedTimeStr.value
+            )
+            Snackbar.make(it, msgSending, Snackbar.LENGTH_SHORT).show()
+            // TODO: Display snackbar "Data point sent: HH:MM"
         }
     }
 }
