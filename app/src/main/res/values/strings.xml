@@ -5,4 +5,6 @@
     <string name="main_play">Play</string>
     <string name="main_reset">Reset</string>
     <string name="main_pause">Pause</string>
+    <string name="main_send">Send</string>
+    <string name="main_send_elapsed">Send %1$s</string>
 </resources>

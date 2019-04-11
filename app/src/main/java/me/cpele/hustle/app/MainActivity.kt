@@ -31,6 +31,10 @@ class MainActivity : AppCompatActivity() {
             main_play_pause_button.text = it
         })
 
+        viewModel.elapsedTimeStr.observe(this, Observer { it: String ->
+            main_send_button.text = getString(R.string.main_send_elapsed, it)
+        })
+
         main_play_pause_button.setOnClickListener { viewModel.onTogglePlayPause() }
         main_reset_button.setOnClickListener { viewModel.onReset() }
         main_change_button.setOnClickListener {
@@ -46,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         main_send_button.setOnClickListener {
+            // TODO: Cf. chrome download UX
             // TODO: Display animated snackbar "♺ sending to beeminder: HH:MM"
             // TODO: Display snackbar "✔ sending to beeminder: HH:MM"
         }

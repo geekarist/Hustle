@@ -21,7 +21,7 @@ class EggTimer(
     private val label: String
         get() = if (isPlaying) stringProvider.mainPause else stringProvider.mainPlay
 
-    var remainingMillis: Long = 0
+    private var remainingMillis: Long = 0
     private var elapsedMillis: Long = 0
 
     @ExperimentalCoroutinesApi
@@ -40,7 +40,8 @@ class EggTimer(
                 val state = State(
                     timeFormatting.apply(remainingMillis),
                     isPlaying,
-                    label
+                    label,
+                    timeFormatting.apply(elapsedMillis)
                 )
                 send(state)
             }
@@ -67,7 +68,8 @@ class EggTimer(
     data class State(
         val timeStr: String,
         val isPlaying: Boolean,
-        val playPauseLabel: String
+        val playPauseLabel: String,
+        val elapsedTimeStr: String
     )
 
     interface StringProvider {

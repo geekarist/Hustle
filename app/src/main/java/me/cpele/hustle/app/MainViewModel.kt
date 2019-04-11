@@ -18,12 +18,16 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
     private val _playPauseLabelData = MutableLiveData<String>()
     val playPauseLabelData: LiveData<String> get() = _playPauseLabelData
 
+    private val _elapsedTimeStr = MutableLiveData<String>()
+    val elapsedTimeStr: LiveData<String> = _elapsedTimeStr
+
     init {
         viewModelScope.launch {
             for (state in eggTimer.channel) {
                 _strTimeData.value = state.timeStr
                 isPlayingData.value = state.isPlaying
                 _playPauseLabelData.value = state.playPauseLabel
+                _elapsedTimeStr.value = state.elapsedTimeStr
             }
         }
     }
