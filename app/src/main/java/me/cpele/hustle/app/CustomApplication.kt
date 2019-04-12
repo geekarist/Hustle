@@ -2,6 +2,7 @@ package me.cpele.hustle.app
 
 import android.app.Application
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import me.cpele.hustle.domain.DataPointRepository
 import me.cpele.hustle.domain.EggTimer
 
 class CustomApplication : Application() {
@@ -14,8 +15,16 @@ class CustomApplication : Application() {
         AndroidTimeFormatting()
     }
 
+    private val androidBeeminderDataPointRepository: DataPointRepository by lazy {
+        AndroidBeeminderDataPointRepository(this)
+    }
+
     private val eggTimerFactory: EggTimer.Factory by lazy {
-        EggTimer.Factory(androidStringProvider, androidTimeFormatting)
+        EggTimer.Factory(
+            androidStringProvider,
+            androidTimeFormatting,
+            androidBeeminderDataPointRepository
+        )
     }
 
     @ExperimentalCoroutinesApi
