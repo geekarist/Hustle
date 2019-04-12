@@ -3,6 +3,7 @@ package me.cpele.hustle.app
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import me.cpele.hustle.domain.EggTimer
 
@@ -40,8 +41,7 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
     fun onReset() = eggTimer.reset()
 
     override fun onCleared() {
-        eggTimer.channel.cancel()
-        // TODO eggTimer.cancel()
+        eggTimer.cancel()
         super.onCleared()
     }
 

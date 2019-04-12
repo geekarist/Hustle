@@ -14,8 +14,9 @@ class EggTimer(
     private val dataPointRepository: DataPointRepository
 ) : CoroutineScope {
 
+    private val job = Job()
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Default
+        get() = job + Dispatchers.Default
 
     private var isPlaying: Boolean = false
 
