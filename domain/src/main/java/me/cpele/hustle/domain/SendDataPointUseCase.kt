@@ -15,7 +15,7 @@ class SendDataPointUseCase(private val dataPointRepository: DataPointRepository)
             timer.reset()
             deferred.complete(Response("TODO: Send $elapsedMillis to Beeminder"))
         } catch (e: CancellationException) {
-            deferred.complete(Response("TODO: Cancel sending data point"))
+            deferred.complete(Response("TODO: Sending cancelled"))
         } catch (e: Error) {
             deferred.complete(Response("TODO: Error"))
         }
