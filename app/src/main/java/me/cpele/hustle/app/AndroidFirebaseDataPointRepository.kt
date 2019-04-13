@@ -1,16 +1,26 @@
 package me.cpele.hustle.app
 
-import android.content.Context
-import kotlinx.coroutines.delay
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import me.cpele.hustle.domain.DataPointRepository
-import java.util.concurrent.TimeUnit
 
-class AndroidFirebaseDataPointRepository(private val context: Context) : DataPointRepository {
+class AndroidFirebaseDataPointRepository : DataPointRepository {
+
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
+    }
+
+    private val firebaseAuth by lazy {
+        FirebaseAuth.getInstance()
+    }
+
     override suspend fun insert(elapsedMillis: Long) {
-        // TODO: Login
-        delay(3000)
-        // TODO: Send to web service
-        // TODO: Throw exception on error
-        if (elapsedMillis < TimeUnit.SECONDS.toMillis(5)) throw Error()
+        val dataPoint = mapOf(
+            "user" to firebaseAuth.currentUser?.email,
+            "time" to elapsedMillis
+        )
+        db.collection("dataPoints")
+            .add(dataPoint)
+            .addOnFailureListener { throw it }
     }
 }

@@ -17,7 +17,7 @@ class CustomApplication : Application() {
     }
 
     private val firebaseDataPointRepository: DataPointRepository by lazy {
-        AndroidFirebaseDataPointRepository(this)
+        AndroidFirebaseDataPointRepository()
     }
 
     private val eggTimerFactory: EggTimer.Factory by lazy {

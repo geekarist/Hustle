@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "176805978546",
+    "firebase_url": "https://hustle-ab2dd.firebaseio.com",
+    "project_id": "hustle-ab2dd",
+    "storage_bucket": "hustle-ab2dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176805978546:android:29e2964edb964a8b",
+        "android_client_info": {
+          "package_name": "me.cpele.hustle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176805978546-fobu6h62emjmn6jl5r9lser0s9731mdi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCML8j2fwsxentkmi1FM6dL-Es4SA764A0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176805978546-fobu6h62emjmn6jl5r9lser0s9731mdi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
