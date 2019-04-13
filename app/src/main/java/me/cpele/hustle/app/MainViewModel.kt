@@ -48,9 +48,7 @@ class MainViewModel(
         super.onCleared()
     }
 
-    fun onChangeDuration(hour: Int, minute: Int) {
-        eggTimer.changeDuration(hour, minute)
-    }
+    fun onChangeDuration(hour: Int, minute: Int) = eggTimer.changeDuration(hour, minute)
 
     fun sendDataPoint() = viewModelScope.launch {
         val response = sendDataPointUseCase.executeAsync(eggTimer).await()

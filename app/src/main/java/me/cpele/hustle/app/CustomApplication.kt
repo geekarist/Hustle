@@ -16,8 +16,8 @@ class CustomApplication : Application() {
         AndroidTimeFormatting()
     }
 
-    private val androidBeeminderDataPointRepository: DataPointRepository by lazy {
-        AndroidBeeminderDataPointRepository(this)
+    private val firebaseDataPointRepository: DataPointRepository by lazy {
+        AndroidFirebaseDataPointRepository(this)
     }
 
     private val eggTimerFactory: EggTimer.Factory by lazy {
@@ -28,7 +28,7 @@ class CustomApplication : Application() {
     }
 
     private val sendDataPointUseCase: SendDataPointUseCase by lazy {
-        SendDataPointUseCase(androidBeeminderDataPointRepository)
+        SendDataPointUseCase(firebaseDataPointRepository)
     }
 
     @ExperimentalCoroutinesApi

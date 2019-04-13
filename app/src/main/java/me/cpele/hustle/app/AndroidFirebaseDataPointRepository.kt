@@ -5,7 +5,7 @@ import kotlinx.coroutines.delay
 import me.cpele.hustle.domain.DataPointRepository
 import java.util.concurrent.TimeUnit
 
-class AndroidBeeminderDataPointRepository(private val context: Context) : DataPointRepository {
+class AndroidFirebaseDataPointRepository(private val context: Context) : DataPointRepository {
     override suspend fun insert(elapsedMillis: Long) {
         // TODO: Login
         delay(3000)
