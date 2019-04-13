@@ -10,8 +10,7 @@ import kotlin.coroutines.CoroutineContext
 
 class EggTimer(
     private val stringProvider: StringProvider,
-    private val timeFormatting: TimeFormatting,
-    private val dataPointRepository: DataPointRepository
+    private val timeFormatting: TimeFormatting
 ) : CoroutineScope {
 
     private val job = Job()
@@ -24,7 +23,8 @@ class EggTimer(
         get() = if (isPlaying) stringProvider.mainPause else stringProvider.mainPlay
 
     private var remainingMillis: Long = 0
-    private var elapsedMillis: Long = 0
+    var elapsedMillis: Long = 0
+        private set
 
     @ExperimentalCoroutinesApi
     val channel: ReceiveChannel<State> = produce {
@@ -67,9 +67,8 @@ class EggTimer(
             TimeUnit.HOURS.toMillis(hourOfDay.toLong()) + TimeUnit.MINUTES.toMillis(minute.toLong())
     }
 
-    fun send() {
+    fun pause() {
         isPlaying = false
-        dataPointRepository.insert(elapsedMillis)
     }
 
     data class State(
@@ -90,9 +89,8 @@ class EggTimer(
 
     class Factory(
         private val stringProvider: StringProvider,
-        private val timeFormatting: TimeFormatting,
-        private val dataPointRepository: DataPointRepository
+        private val timeFormatting: TimeFormatting
     ) {
-        fun create(): EggTimer = EggTimer(stringProvider, timeFormatting, dataPointRepository)
+        fun create(): EggTimer = EggTimer(stringProvider, timeFormatting)
     }
 }

@@ -1,14 +1,17 @@
 package me.cpele.hustle.app
 
 import androidx.lifecycle.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import me.cpele.hustle.domain.EggTimer
+import me.cpele.hustle.domain.SendDataPointUseCase
 
 @ExperimentalCoroutinesApi
-class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
+class MainViewModel(
+    eggTimerFactory: EggTimer.Factory,
+    private val sendDataPointUseCase: SendDataPointUseCase
+) : ViewModel() {
 
     private val eggTimer = eggTimerFactory.create()
 
@@ -23,8 +26,8 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
     private val _elapsedTimeStr = MutableLiveData<String>()
     val elapsedTimeStr: LiveData<String> = _elapsedTimeStr
 
-    private val _dataPointSentEvent = MutableLiveData<LiveEvent<Unit>>()
-    val dataPointSentEvent: LiveData<LiveEvent<Unit>> = _dataPointSentEvent
+    private val _dataPointSentEvent = MutableLiveData<LiveEvent<String>>()
+    val dataPointSentEvent: LiveData<LiveEvent<String>> = _dataPointSentEvent
 
     init {
         viewModelScope.launch {
@@ -49,16 +52,17 @@ class MainViewModel(eggTimerFactory: EggTimer.Factory) : ViewModel() {
         eggTimer.changeDuration(hour, minute)
     }
 
-    fun sendDataPoint() = viewModelScope.launch(Dispatchers.IO) {
-        eggTimer.send()
-        _dataPointSentEvent.postValue(LiveEvent(Unit))
+    fun sendDataPoint() = viewModelScope.launch {
+        val response = sendDataPointUseCase.executeAsync(eggTimer).await()
+        _dataPointSentEvent.postValue(LiveEvent(response.message))
     }
 
     class Factory(
-        private val eggTimerFactory: EggTimer.Factory
+        private val eggTimerFactory: EggTimer.Factory,
+        private val sendDataPointUseCase: SendDataPointUseCase
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return modelClass.cast(MainViewModel(eggTimerFactory)) as T
+            return modelClass.cast(MainViewModel(eggTimerFactory, sendDataPointUseCase)) as T
         }
     }
 }

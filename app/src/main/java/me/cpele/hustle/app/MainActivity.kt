@@ -37,10 +37,10 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.dataPointSentEvent.observe(this, Observer {
-            it.unconsumed?.apply {
+            it.unconsumed?.let { message ->
                 val msgDataPointSent = getString(
                     R.string.main_data_point_sent,
-                    viewModel.elapsedTimeStr.value
+                    message
                 )
                 Snackbar.make(main_container, msgDataPointSent, Snackbar.LENGTH_SHORT).show()
             }
