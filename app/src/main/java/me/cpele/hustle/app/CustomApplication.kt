@@ -4,6 +4,7 @@ import android.app.Application
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import me.cpele.hustle.domain.DataPointRepository
 import me.cpele.hustle.domain.EggTimer
+import me.cpele.hustle.domain.InMemoryDataPointRepository
 import me.cpele.hustle.domain.SendDataPointUseCase
 
 class CustomApplication : Application() {
@@ -16,8 +17,9 @@ class CustomApplication : Application() {
         AndroidTimeFormatting()
     }
 
-    private val firebaseDataPointRepository: DataPointRepository by lazy {
-        AndroidFirebaseDataPointRepository()
+    private val dataPointRepository: DataPointRepository by lazy {
+        //        AndroidFirebaseDataPointRepository()
+        InMemoryDataPointRepository()
     }
 
     private val eggTimerFactory: EggTimer.Factory by lazy {
@@ -28,7 +30,7 @@ class CustomApplication : Application() {
     }
 
     private val sendDataPointUseCase: SendDataPointUseCase by lazy {
-        SendDataPointUseCase(firebaseDataPointRepository)
+        SendDataPointUseCase(dataPointRepository)
     }
 
     @ExperimentalCoroutinesApi
