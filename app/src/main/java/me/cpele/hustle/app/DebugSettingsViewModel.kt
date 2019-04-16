@@ -1,19 +1,26 @@
 package me.cpele.hustle.app
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import me.cpele.hustle.domain.DataPointRepository
 
-class DebugSettingsViewModel : ViewModel() {
+class DebugSettingsViewModel(private val dataPointRepository: DataPointRepository) : ViewModel() {
 
-    private val _dataPoints = MutableLiveData<List<Long>>().apply {
-        value = listOf(
-            System.currentTimeMillis(),
-            System.currentTimeMillis(),
-            System.currentTimeMillis(),
-            System.currentTimeMillis(),
-            System.currentTimeMillis()
-        )
+    private val _dataPointsData = MutableLiveData<List<Long>>()
+    val dataPointsData: LiveData<List<Long>> = _dataPointsData
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val dataPoints = dataPointRepository.findAll()
+            _dataPointsData.postValue(dataPoints)
+        }
     }
-    val dataPoints: LiveData<List<Long>> = _dataPoints
+
+    class Factory(private val dataPointRepository: DataPointRepository) :
+        ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return modelClass.cast(DebugSettingsViewModel(dataPointRepository)) as T
+        }
+    }
 }

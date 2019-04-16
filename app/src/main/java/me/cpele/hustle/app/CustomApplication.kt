@@ -38,6 +38,10 @@ class CustomApplication : Application() {
         MainViewModel.Factory(eggTimerFactory, sendDataPointUseCase)
     }
 
+    val debugViewModelFactory by lazy {
+        DebugSettingsViewModel.Factory(dataPointRepository)
+    }
+
     override fun onCreate() {
         super.onCreate()
         instance = this

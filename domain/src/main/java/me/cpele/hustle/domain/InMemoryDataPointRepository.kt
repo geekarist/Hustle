@@ -7,4 +7,6 @@ class InMemoryDataPointRepository : DataPointRepository {
     override suspend fun insert(elapsedMillis: Long) {
         dataPoints += elapsedMillis
     }
+
+    override suspend fun findAll(): List<Long> = dataPoints
 }

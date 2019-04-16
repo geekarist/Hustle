@@ -1,19 +1,19 @@
 package me.cpele.hustle.domain
 
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.*
 
 class SendDataPointUseCase(private val dataPointRepository: DataPointRepository) {
 
     suspend fun executeAsync(timer: EggTimer): Deferred<Response> {
         val deferred = CompletableDeferred<Response>()
-        timer.pause()
-        val elapsedMillis = timer.elapsedMillis
         try {
-            dataPointRepository.insert(elapsedMillis)
-            timer.reset()
-            deferred.complete(Response("TODO: Send $elapsedMillis to Beeminder"))
+            timer.pause()
+            val elapsedMillis = timer.elapsedMillis
+            withContext(Dispatchers.IO) {
+                dataPointRepository.insert(elapsedMillis)
+                timer.reset()
+                deferred.complete(Response("TODO: Send $elapsedMillis to Beeminder"))
+            }
         } catch (e: CancellationException) {
             deferred.complete(Response("TODO: Sending cancelled"))
         } catch (e: Error) {

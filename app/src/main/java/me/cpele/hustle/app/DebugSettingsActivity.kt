@@ -21,7 +21,10 @@ class DebugSettingsActivity : AppCompatActivity() {
     }
 
     private val viewModel by lazy {
-        ViewModelProviders.of(this).get(DebugSettingsViewModel::class.java)
+        ViewModelProviders.of(
+            this,
+            CustomApplication.instance.debugViewModelFactory
+        ).get(DebugSettingsViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +35,7 @@ class DebugSettingsActivity : AppCompatActivity() {
         val adapter = DataPointAdapter()
         debug_data_points_list.adapter = adapter
         debug_data_points_list.layoutManager = LinearLayoutManager(this)
-        viewModel.dataPoints.observe(this, Observer {
+        viewModel.dataPointsData.observe(this, Observer {
             adapter.submitList(it)
         })
     }
