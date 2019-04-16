@@ -9,4 +9,5 @@
     <string name="main_send_elapsed">Send %1$s</string>
     <string name="main_sending_data_point">Sending data point: %1$s</string>
     <string name="main_data_point_sent">Data point sent: %1$s</string>
+    <string name="main_debug_settings">Debug Settings</string>
 </resources>

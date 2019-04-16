@@ -2,6 +2,8 @@ package me.cpele.hustle.app
 
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -69,4 +71,18 @@ class MainActivity : AppCompatActivity() {
             viewModel.sendDataPoint()
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_options, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean =
+        when (item?.itemId) {
+            R.id.item_debug_settings -> {
+                DebugSettingsActivity.start(this)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
 }
