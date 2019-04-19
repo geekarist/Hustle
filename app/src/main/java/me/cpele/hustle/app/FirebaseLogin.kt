@@ -1,7 +1,9 @@
 package me.cpele.hustle.app
 
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
 class FirebaseLogin : CoroutineScope {
@@ -14,7 +16,7 @@ class FirebaseLogin : CoroutineScope {
         FirebaseAuth.getInstance()
     }
 
-    fun complete(): Deferred<Unit> = async {
+    fun complete() {
         TODO()
     }
 }

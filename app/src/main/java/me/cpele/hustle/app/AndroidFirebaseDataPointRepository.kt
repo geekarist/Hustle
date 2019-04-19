@@ -17,7 +17,7 @@ class AndroidFirebaseDataPointRepository(
 
     override suspend fun findAll(): List<Long> {
 
-        firebaseLogin.complete().await()
+        firebaseLogin.complete()
 
         val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
             ?: throw IllegalStateException("User should be logged in at this point")
@@ -42,17 +42,21 @@ class AndroidFirebaseDataPointRepository(
     }
 
     override suspend fun insert(elapsedMillis: Long) {
-        firebaseLogin.complete().await()
+        firebaseLogin.complete()
 
         val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
             ?: throw IllegalStateException("User should be logged in at this point")
 
-        val dataPoint = mapOf(
-            "user" to currentUserEmail,
-            "time" to elapsedMillis
-        )
-        db.collection("dataPoints")
-            .add(dataPoint)
-            .addOnFailureListener { throw it }
+        return suspendCoroutine { continuation ->
+
+            val dataPoint = mapOf(
+                "user" to currentUserEmail,
+                "time" to elapsedMillis
+            )
+            db.collection("dataPoints")
+                .add(dataPoint)
+                .addOnSuccessListener { continuation.resumeWith(Result.success(Unit)) }
+                .addOnFailureListener { continuation.resumeWithException(it) }
+        }
     }
 }
