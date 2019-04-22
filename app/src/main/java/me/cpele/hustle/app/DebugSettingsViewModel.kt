@@ -8,28 +8,36 @@ import me.cpele.hustle.domain.DataPointRepository
 
 class DebugSettingsViewModel(private val dataPointRepository: DataPointRepository) : ViewModel() {
 
-    private val _dataPointsData = MutableLiveData<List<Long>>()
-    val dataPointsData: LiveData<List<Long>> = _dataPointsData
-
-    private val _dataPointsVisibilityData = MutableLiveData<Int>()
-    val dataPointsVisibilityData: LiveData<Int> = _dataPointsVisibilityData
-
-    private val _dataPointsErrorVisibilityData = MutableLiveData<Int>()
-    val dataPointsErrorVisibilityData: LiveData<Int> = _dataPointsErrorVisibilityData
+    private val _viewStateData = MutableLiveData<ViewState>()
+    val viewStateData: LiveData<ViewState> = _viewStateData
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val dataPoints = dataPointRepository.findAll()
-                _dataPointsData.postValue(dataPoints)
-                _dataPointsVisibilityData.postValue(View.VISIBLE)
-                _dataPointsErrorVisibilityData.postValue(View.GONE)
+                _viewStateData.postValue(
+                    ViewState(
+                        dataPoints = dataPoints,
+                        dataPointsVisibility = View.VISIBLE,
+                        dataPointsErrorVisibility = View.GONE
+                    )
+                )
             } catch (e: Error) {
-                _dataPointsVisibilityData.postValue(View.GONE)
-                _dataPointsErrorVisibilityData.postValue(View.VISIBLE)
+                _viewStateData.postValue(
+                    ViewState(
+                        dataPointsVisibility = View.GONE,
+                        dataPointsErrorVisibility = View.VISIBLE
+                    )
+                )
             }
         }
     }
+
+    data class ViewState(
+        val dataPoints: List<Long> = emptyList(),
+        val dataPointsVisibility: Int,
+        val dataPointsErrorVisibility: Int
+    )
 
     class Factory(private val dataPointRepository: DataPointRepository) :
         ViewModelProvider.Factory {

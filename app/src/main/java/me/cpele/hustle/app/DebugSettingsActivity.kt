@@ -35,16 +35,11 @@ class DebugSettingsActivity : AppCompatActivity() {
         val adapter = DataPointAdapter()
         debug_data_points_list.adapter = adapter
         debug_data_points_list.layoutManager = LinearLayoutManager(this)
-        viewModel.dataPointsData.observe(this, Observer {
-            adapter.submitList(it)
-        })
 
-        viewModel.dataPointsVisibilityData.observe(this, Observer {
-            debug_data_points_list.visibility = it
-        })
-
-        viewModel.dataPointsErrorVisibilityData.observe(this, Observer {
-            debug_data_points_error_text.visibility = it
+        viewModel.viewStateData.observe(this, Observer {
+            adapter.submitList(it.dataPoints)
+            debug_data_points_list.visibility = it.dataPointsVisibility
+            debug_data_points_error_text.visibility = it.dataPointsErrorVisibility
         })
     }
 
