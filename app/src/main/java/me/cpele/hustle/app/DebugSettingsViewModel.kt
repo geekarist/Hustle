@@ -39,15 +39,6 @@ class DebugSettingsViewModel(
         }
     }
 
-    fun onFirebaseLoginClicked() = viewModelScope.launch {
-        try {
-            firebaseLogin.complete()
-        } catch (e: Error) {
-            val message = "Error logging in to Firebase: ${e.message}"
-            _viewEventData.postValue(Consumable(ViewEvent.Toast(message)))
-        }
-    }
-
     data class ViewState(
         val dataPoints: List<Long> = emptyList(),
         val dataPointsVisibility: Int,

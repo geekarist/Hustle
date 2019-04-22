@@ -43,10 +43,6 @@ class DebugSettingsActivity : AppCompatActivity() {
 
         viewModel.viewStateData.observe(this, Observer { renderViewState(it) })
         viewModel.viewEventData.observe(this, Observer { renderViewEvent(it.unconsumed) })
-
-        debug_firebase_login_button.setOnClickListener {
-            viewModel.onFirebaseLoginClicked()
-        }
     }
 
     private fun renderViewEvent(event: DebugSettingsViewModel.ViewEvent?) {
