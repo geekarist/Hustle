@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".app.DebugSettingsActivity" />
+        <activity android:name=".app.FirebaseLoginActivity" />
     </application>
 
 </manifest>

@@ -1,22 +1,41 @@
 package me.cpele.hustle.app
 
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlin.coroutines.CoroutineContext
+import android.app.Application
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.util.Log
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeout
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
-class FirebaseLogin : CoroutineScope {
+class FirebaseLogin(private val application: Application) {
 
-    private val job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
-
-    private val firebaseAuth by lazy {
-        FirebaseAuth.getInstance()
-    }
-
-    fun complete() {
-        TODO()
+    suspend fun complete() {
+        var receiver: BroadcastReceiver? = null
+        try {
+            withTimeout(TimeUnit.MINUTES.toMillis(2)) {
+                suspendCancellableCoroutine { continuation: Continuation<Unit> ->
+                    receiver = object : BroadcastReceiver() {
+                        override fun onReceive(context: Context?, intent: Intent?) {
+                            Log.d(FirebaseLogin::class.java.simpleName, "Broadcast received")
+                            application.unregisterReceiver(this)
+                            continuation.resume(Unit)
+                        }
+                    }
+                    val filter = IntentFilter(FirebaseLoginActivity.ACTION_FIREBASE_LOGIN_SUCCESS)
+                    application.registerReceiver(receiver, filter)
+                    Log.d(FirebaseLogin::class.java.simpleName, "Receiver registered")
+                    FirebaseLoginActivity.start(application)
+                }
+            }
+        } catch (e: TimeoutCancellationException) {
+            receiver?.let { application.unregisterReceiver(receiver) }
+            Log.d(FirebaseLogin::class.java.simpleName, "Timed out")
+        }
     }
 }

@@ -28,7 +28,7 @@ class DebugSettingsViewModel(
                         dataPointsErrorVisibility = View.GONE
                     )
                 )
-            } catch (e: Error) {
+            } catch (t: Throwable) {
                 _viewStateData.postValue(
                     ViewState(
                         dataPointsVisibility = View.GONE,

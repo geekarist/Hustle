@@ -21,6 +21,10 @@ class DebugSettingsActivity : AppCompatActivity() {
         }
     }
 
+    private val adapter by lazy {
+        debug_data_points_list.adapter as? DataPointAdapter
+    }
+
     private val viewModel by lazy {
         ViewModelProviders.of(
             this,
@@ -37,7 +41,7 @@ class DebugSettingsActivity : AppCompatActivity() {
         debug_data_points_list.adapter = adapter
         debug_data_points_list.layoutManager = LinearLayoutManager(this)
 
-        viewModel.viewStateData.observe(this, Observer { renderViewState(adapter, it) })
+        viewModel.viewStateData.observe(this, Observer { renderViewState(it) })
         viewModel.viewEventData.observe(this, Observer { renderViewEvent(it.unconsumed) })
 
         debug_firebase_login_button.setOnClickListener {
@@ -55,13 +59,10 @@ class DebugSettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun renderViewState(
-        adapter: DataPointAdapter,
-        it: DebugSettingsViewModel.ViewState
-    ) {
-        adapter.submitList(it.dataPoints)
-        debug_data_points_list.visibility = it.dataPointsVisibility
-        debug_data_points_error_text.visibility = it.dataPointsErrorVisibility
+    private fun renderViewState(state: DebugSettingsViewModel.ViewState) {
+        adapter?.submitList(state.dataPoints)
+        debug_data_points_list.visibility = state.dataPointsVisibility
+        debug_data_points_error_text.visibility = state.dataPointsErrorVisibility
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean =

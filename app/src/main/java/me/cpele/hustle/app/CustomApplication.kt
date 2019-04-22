@@ -17,7 +17,7 @@ class CustomApplication : Application() {
     }
 
     private val firebaseLogin: FirebaseLogin by lazy {
-        FirebaseLogin()
+        FirebaseLogin(this)
     }
 
     private val dataPointRepository: DataPointRepository by lazy {
