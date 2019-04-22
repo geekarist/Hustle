@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeout
@@ -16,6 +17,13 @@ import kotlin.coroutines.resume
 class FirebaseLogin(private val application: Application) {
 
     suspend fun complete() {
+        if (!isLoggedIn()) completeLoginFlow()
+    }
+
+    private fun isLoggedIn(): Boolean =
+        FirebaseAuth.getInstance().currentUser?.email != null
+
+    private suspend fun completeLoginFlow() {
         var receiver: BroadcastReceiver? = null
         try {
             withTimeout(TimeUnit.MINUTES.toMillis(2)) {
