@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -36,11 +37,31 @@ class DebugSettingsActivity : AppCompatActivity() {
         debug_data_points_list.adapter = adapter
         debug_data_points_list.layoutManager = LinearLayoutManager(this)
 
-        viewModel.viewStateData.observe(this, Observer {
-            adapter.submitList(it.dataPoints)
-            debug_data_points_list.visibility = it.dataPointsVisibility
-            debug_data_points_error_text.visibility = it.dataPointsErrorVisibility
-        })
+        viewModel.viewStateData.observe(this, Observer { renderViewState(adapter, it) })
+        viewModel.viewEventData.observe(this, Observer { renderViewEvent(it.unconsumed) })
+
+        debug_firebase_login_button.setOnClickListener {
+            viewModel.onFirebaseLoginClicked()
+        }
+    }
+
+    private fun renderViewEvent(event: DebugSettingsViewModel.ViewEvent?) {
+        when (event) {
+            is DebugSettingsViewModel.ViewEvent.Toast -> Toast.makeText(
+                this,
+                event.message,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun renderViewState(
+        adapter: DataPointAdapter,
+        it: DebugSettingsViewModel.ViewState
+    ) {
+        adapter.submitList(it.dataPoints)
+        debug_data_points_list.visibility = it.dataPointsVisibility
+        debug_data_points_error_text.visibility = it.dataPointsErrorVisibility
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean =

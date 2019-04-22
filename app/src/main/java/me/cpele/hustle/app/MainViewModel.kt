@@ -26,8 +26,8 @@ class MainViewModel(
     private val _elapsedTimeStr = MutableLiveData<String>()
     val elapsedTimeStr: LiveData<String> = _elapsedTimeStr
 
-    private val _dataPointSentEvent = MutableLiveData<LiveEvent<String>>()
-    val dataPointSentEvent: LiveData<LiveEvent<String>> = _dataPointSentEvent
+    private val _dataPointSentEvent = MutableLiveData<Consumable<String>>()
+    val dataPointSentEvent: LiveData<Consumable<String>> = _dataPointSentEvent
 
     init {
         viewModelScope.launch {
@@ -52,7 +52,7 @@ class MainViewModel(
 
     fun sendDataPoint() = viewModelScope.launch {
         val response = sendDataPointUseCase.execute(eggTimer)
-        _dataPointSentEvent.postValue(LiveEvent(response.message))
+        _dataPointSentEvent.postValue(Consumable(response.message))
     }
 
     class Factory(

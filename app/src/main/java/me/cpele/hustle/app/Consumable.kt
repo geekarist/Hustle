@@ -1,6 +1,6 @@
 package me.cpele.hustle.app
 
-class LiveEvent<T>(private val value: T) {
+class Consumable<T>(private val value: T) {
 
     private var isConsumed: Boolean = false
 

@@ -41,7 +41,7 @@ class CustomApplication : Application() {
     }
 
     val debugViewModelFactory by lazy {
-        DebugSettingsViewModel.Factory(dataPointRepository)
+        DebugSettingsViewModel.Factory(dataPointRepository, firebaseLogin)
     }
 
     override fun onCreate() {
