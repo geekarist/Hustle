@@ -1,5 +1,6 @@
 package me.cpele.hustle.app
 
+import android.view.View
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -10,10 +11,23 @@ class DebugSettingsViewModel(private val dataPointRepository: DataPointRepositor
     private val _dataPointsData = MutableLiveData<List<Long>>()
     val dataPointsData: LiveData<List<Long>> = _dataPointsData
 
+    private val _dataPointsVisibilityData = MutableLiveData<Int>()
+    val dataPointsVisibilityData: LiveData<Int> = _dataPointsVisibilityData
+
+    private val _dataPointsErrorVisibilityData = MutableLiveData<Int>()
+    val dataPointsErrorVisibilityData: LiveData<Int> = _dataPointsErrorVisibilityData
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val dataPoints = dataPointRepository.findAll()
-            _dataPointsData.postValue(dataPoints)
+            try {
+                val dataPoints = dataPointRepository.findAll()
+                _dataPointsData.postValue(dataPoints)
+                _dataPointsVisibilityData.postValue(View.VISIBLE)
+                _dataPointsErrorVisibilityData.postValue(View.GONE)
+            } catch (e: Error) {
+                _dataPointsVisibilityData.postValue(View.GONE)
+                _dataPointsErrorVisibilityData.postValue(View.VISIBLE)
+            }
         }
     }
 

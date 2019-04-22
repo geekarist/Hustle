@@ -70,6 +70,8 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(main_container, msgSendingDataPoint, Snackbar.LENGTH_SHORT).show()
             viewModel.sendDataPoint()
         }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

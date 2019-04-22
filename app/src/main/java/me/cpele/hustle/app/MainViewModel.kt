@@ -51,7 +51,7 @@ class MainViewModel(
     fun onChangeDuration(hour: Int, minute: Int) = eggTimer.changeDuration(hour, minute)
 
     fun sendDataPoint() = viewModelScope.launch {
-        val response = sendDataPointUseCase.executeAsync(eggTimer).await()
+        val response = sendDataPointUseCase.execute(eggTimer)
         _dataPointSentEvent.postValue(LiveEvent(response.message))
     }
 

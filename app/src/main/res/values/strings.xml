@@ -11,4 +11,7 @@
     <string name="main_data_point_sent">Data point sent: %1$s</string>
     <string name="main_debug_settings">Debug Settings</string>
     <string name="debug_data_points">Data Points</string>
+    <string name="debug_firebase">Firebase</string>
+    <string name="debug_firebase_login">Log in</string>
+    <string name="debug_data_points_error">Error loading data points</string>
 </resources>

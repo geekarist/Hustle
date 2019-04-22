@@ -38,6 +38,14 @@ class DebugSettingsActivity : AppCompatActivity() {
         viewModel.dataPointsData.observe(this, Observer {
             adapter.submitList(it)
         })
+
+        viewModel.dataPointsVisibilityData.observe(this, Observer {
+            debug_data_points_list.visibility = it
+        })
+
+        viewModel.dataPointsErrorVisibilityData.observe(this, Observer {
+            debug_data_points_error_text.visibility = it
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean =

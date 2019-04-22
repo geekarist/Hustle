@@ -27,6 +27,30 @@
             android:layout_marginEnd="8dp"
             tools:listitem="@android:layout/simple_list_item_1" />
 
+        <TextView
+            android:id="@+id/debug_data_points_error_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/debug_data_points_error"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/debug_firebase_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/debug_firebase"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+        <Button
+            android:id="@+id/debug_firebase_login_button"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/debug_firebase_login" />
+
     </LinearLayout>
 
 </ScrollView>
