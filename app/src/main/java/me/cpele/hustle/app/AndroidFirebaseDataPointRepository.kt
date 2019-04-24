@@ -29,10 +29,10 @@ class AndroidFirebaseDataPointRepository(
                 .addOnSuccessListener { snapshot ->
                     val value: List<Long> = snapshot
                         .filter { it["user"] == currentUserEmail }
-                        .filter { it["time"] is Long }
+                        .filter { it["duration"] is Long }
                         .map {
-                            it.getLong("time")
-                                ?: throw IllegalStateException("Field 'time' should be Long and not null")
+                            it.getLong("duration")
+                                ?: throw IllegalStateException("Field 'duration' should be Long and not null")
                         }
                     continuation.resume(value)
                 }.addOnFailureListener {
@@ -51,7 +51,8 @@ class AndroidFirebaseDataPointRepository(
 
             val dataPoint = mapOf(
                 "user" to currentUserEmail,
-                "time" to elapsedMillis
+                "duration" to elapsedMillis,
+                "time" to System.currentTimeMillis()
             )
             db.collection("dataPoints")
                 .add(dataPoint)
