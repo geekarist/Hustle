@@ -26,6 +26,17 @@ class EggTimer(
     var elapsedMillis: Long = 0
         private set
 
+    val hour: Int get() = TimeUnit.MILLISECONDS.toHours(remainingMillis).toInt()
+
+    val minute: Int
+        get() {
+            val remainingHours = TimeUnit.MILLISECONDS.toHours(remainingMillis)
+            val remainingHoursInMillis = TimeUnit.HOURS.toMillis(remainingHours)
+            val remainingMinutesInMillis = remainingMillis - remainingHoursInMillis
+            val remainingMinutes = TimeUnit.MILLISECONDS.toMinutes(remainingMinutesInMillis)
+            return remainingMinutes.toInt()
+        }
+
     @ExperimentalCoroutinesApi
     val channel: ReceiveChannel<State> = produce {
         val timer = Timer()

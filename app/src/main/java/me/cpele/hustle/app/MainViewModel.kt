@@ -15,27 +15,23 @@ class MainViewModel(
 
     private val eggTimer = eggTimerFactory.create()
 
-    private val _strTimeData = MutableLiveData<String>()
-    val strTimeData: LiveData<String> get() = _strTimeData
+    private val _viewStateData = MutableLiveData<ViewState>()
+    val viewStateData: LiveData<ViewState> = _viewStateData
 
-    private val isPlayingData = MutableLiveData<Boolean>()
-
-    private val _playPauseLabelData = MutableLiveData<String>()
-    val playPauseLabelData: LiveData<String> get() = _playPauseLabelData
-
-    private val _elapsedTimeStr = MutableLiveData<String>()
-    val elapsedTimeStr: LiveData<String> = _elapsedTimeStr
-
-    private val _dataPointSentEvent = MutableLiveData<Consumable<String>>()
-    val dataPointSentEvent: LiveData<Consumable<String>> = _dataPointSentEvent
+    private val _viewEventData = MutableLiveData<Consumable<ViewEvent>>()
+    val viewEventData: LiveData<Consumable<ViewEvent>> = _viewEventData
 
     init {
         viewModelScope.launch {
             for (state in eggTimer.channel) {
-                _strTimeData.value = state.timeStr
-                isPlayingData.value = state.isPlaying
-                _playPauseLabelData.value = state.playPauseLabel
-                _elapsedTimeStr.value = state.elapsedTimeStr
+                _viewStateData.postValue(
+                    ViewState(
+                        state.timeStr,
+                        state.isPlaying,
+                        state.playPauseLabel,
+                        state.elapsedTimeStr
+                    )
+                )
             }
         }
     }
@@ -52,7 +48,29 @@ class MainViewModel(
 
     fun sendDataPoint() = viewModelScope.launch {
         val response = sendDataPointUseCase.execute(eggTimer)
-        _dataPointSentEvent.postValue(Consumable(response.message))
+        _viewEventData.postValue(Consumable(ViewEvent.Message(response.message)))
+    }
+
+    fun onClickChange() =
+        _viewEventData.postValue(
+            Consumable(
+                ViewEvent.PickTime(
+                    eggTimer.hour,
+                    eggTimer.minute
+                )
+            )
+        )
+
+    data class ViewState(
+        val remainingTime: String,
+        val isPlaying: Boolean,
+        val playPauseLabel: String,
+        val elapsedTime: String
+    )
+
+    sealed class ViewEvent {
+        data class Message(val message: String) : ViewEvent()
+        data class PickTime(val hour: Int, val minute: Int) : ViewEvent()
     }
 
     class Factory(
