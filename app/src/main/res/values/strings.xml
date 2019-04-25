@@ -19,7 +19,7 @@
     <string name="debug_list">List</string>
 
     <string-array name="debug_targets">
-        <item>Beeminder</item>
+        <item>In memory</item>
         <item>Firebase</item>
     </string-array>
 </resources>
