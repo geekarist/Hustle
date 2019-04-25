@@ -6,5 +6,12 @@ import java.util.concurrent.TimeUnit
 
 class AndroidTimeFormatting : EggTimer.TimeFormatting {
     override fun apply(timeMillis: Long): String =
-        DateUtils.formatElapsedTime(TimeUnit.MILLISECONDS.toSeconds(timeMillis))
+        if (timeMillis < 0) {
+            val positiveTimeMillis = -timeMillis
+            val positiveTimeSeconds = TimeUnit.MILLISECONDS.toSeconds(positiveTimeMillis)
+            val positiveTimeStr = DateUtils.formatElapsedTime(positiveTimeSeconds)
+            "-$positiveTimeStr"
+        } else {
+            DateUtils.formatElapsedTime(TimeUnit.MILLISECONDS.toSeconds(timeMillis))
+        }
 }
