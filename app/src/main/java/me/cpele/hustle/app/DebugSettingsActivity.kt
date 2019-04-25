@@ -41,24 +41,24 @@ class DebugSettingsActivity : AppCompatActivity() {
         debug_data_points_list.adapter = adapter
         debug_data_points_list.layoutManager = LinearLayoutManager(this)
 
-        viewModel.viewStateData.observe(this, Observer { renderViewState(it) })
-        viewModel.viewEventData.observe(this, Observer { renderViewEvent(it.unconsumed) })
+        viewModel.viewStateData.observe(this, Observer { it.render() })
+        viewModel.viewEventData.observe(this, Observer { it.unconsumed?.render() })
     }
 
-    private fun renderViewEvent(event: DebugSettingsViewModel.ViewEvent?) {
-        when (event) {
+    private fun DebugSettingsViewModel.ViewEvent.render() {
+        when (this) {
             is DebugSettingsViewModel.ViewEvent.Toast -> Toast.makeText(
-                this,
-                event.message,
+                this@DebugSettingsActivity,
+                message,
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
 
-    private fun renderViewState(state: DebugSettingsViewModel.ViewState) {
-        adapter?.submitList(state.dataPoints)
-        debug_data_points_list.visibility = state.dataPointsVisibility
-        debug_data_points_error_text.visibility = state.dataPointsErrorVisibility
+    private fun DebugSettingsViewModel.ViewState.render() {
+        adapter?.submitList(dataPoints)
+        debug_data_points_list.visibility = dataPointsVisibility
+        debug_data_points_error_text.visibility = dataPointsErrorVisibility
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean =
