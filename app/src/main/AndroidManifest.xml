@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".app.DebugSettingsActivity" />
         <activity android:name=".app.FirebaseLoginActivity" />
+        <activity android:name=".app.BeeminderLoginActivity" />
     </application>
 
 </manifest>
