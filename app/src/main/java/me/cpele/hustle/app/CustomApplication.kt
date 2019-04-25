@@ -2,17 +2,13 @@ package me.cpele.hustle.app
 
 import android.app.Application
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import me.cpele.hustle.domain.DataPointRepository
-import me.cpele.hustle.domain.EggTimer
-import me.cpele.hustle.domain.InMemoryDataPointRepository
-import me.cpele.hustle.domain.SendDataPointUseCase
+import me.cpele.hustle.domain.*
 
 class CustomApplication : Application() {
 
     private val androidStringProvider: EggTimer.StringProvider by lazy {
         AndroidStringProvider(this)
     }
-
     private val androidTimeFormatting: EggTimer.TimeFormatting by lazy {
         AndroidTimeFormatting()
     }
@@ -21,21 +17,17 @@ class CustomApplication : Application() {
         FirebaseLogin(this)
     }
 
-    private val firebaseDataPointRepository: DataPointRepository by lazy {
-        AndroidFirebaseDataPointRepository(firebaseLogin)
+    private val stringStorage: DataPointRepositorySupplier.StringStorage by lazy {
+        SharedPreferenceStringStorage(this)
     }
 
-    private val inMemoryDataPointRepository by lazy {
-        InMemoryDataPointRepository()
+    private val dataPointRepositorySupplier: DataPointRepositorySupplier by lazy {
+        DataPointRepositorySupplier(
+            stringStorage,
+            DataPointTarget.FIREBASE to AndroidFirebaseDataPointRepository(firebaseLogin),
+            DataPointTarget.IN_MEMORY to InMemoryDataPointRepository()
+        )
     }
-
-    val dataPointRepositorySupplier: DataPointRepositorySupplier by lazy {
-        DataPointRepositorySupplier(firebaseDataPointRepository, inMemoryDataPointRepository)
-    }
-
-    private val dataPointRepository: DataPointRepository
-        get() = dataPointRepositorySupplier.get()
-
 
     private val eggTimerFactory: EggTimer.Factory by lazy {
         EggTimer.Factory(
@@ -45,7 +37,7 @@ class CustomApplication : Application() {
     }
 
     private val sendDataPointUseCase: SendDataPointUseCase by lazy {
-        SendDataPointUseCase(dataPointRepository)
+        SendDataPointUseCase(dataPointRepositorySupplier)
     }
 
     @ExperimentalCoroutinesApi
@@ -54,7 +46,7 @@ class CustomApplication : Application() {
     }
 
     val debugViewModelFactory by lazy {
-        DebugSettingsViewModel.Factory(dataPointRepository)
+        DebugSettingsViewModel.Factory(dataPointRepositorySupplier)
     }
 
     override fun onCreate() {

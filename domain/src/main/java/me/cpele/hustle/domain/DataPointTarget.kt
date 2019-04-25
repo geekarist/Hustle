@@ -1,4 +1,4 @@
-package me.cpele.hustle.app
+package me.cpele.hustle.domain
 
 enum class DataPointTarget(private val str: String) {
 

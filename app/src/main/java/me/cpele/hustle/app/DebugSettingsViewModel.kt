@@ -4,6 +4,8 @@ import android.view.View
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import me.cpele.hustle.domain.DataPointRepositorySupplier
+import me.cpele.hustle.domain.DataPointTarget
 
 class DebugSettingsViewModel(
     private val dataPointRepositorySupplier: DataPointRepositorySupplier
