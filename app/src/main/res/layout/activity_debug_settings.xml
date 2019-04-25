@@ -17,7 +17,27 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="@string/debug_data_points"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/debug_target_title"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+
+        <Spinner
+            android:id="@+id/debug_data_points_targets_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            tools:entries="@array/debug_targets" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/debug_list"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/debug_data_points_list"

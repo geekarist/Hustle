@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -21,8 +22,12 @@ class DebugSettingsActivity : AppCompatActivity() {
         }
     }
 
-    private val adapter by lazy {
-        debug_data_points_list.adapter as? DataPointAdapter
+    private val listAdapter by lazy {
+        debug_data_points_list.adapter as? DataPointListAdapter
+    }
+
+    private val targetsAdapter by lazy {
+        debug_data_points_targets_spinner.adapter
     }
 
     private val viewModel by lazy {
@@ -37,9 +42,16 @@ class DebugSettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_debug_settings)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val adapter = DataPointAdapter()
-        debug_data_points_list.adapter = adapter
+        val listAdapter = DataPointListAdapter()
+        debug_data_points_list.adapter = listAdapter
         debug_data_points_list.layoutManager = LinearLayoutManager(this)
+
+        val targetsAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.debug_targets,
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        debug_data_points_targets_spinner.adapter = targetsAdapter
 
         viewModel.viewStateData.observe(this, Observer { renderViewState(it) })
         viewModel.viewEventData.observe(this, Observer { renderViewEvent(it.unconsumed) })
@@ -56,7 +68,7 @@ class DebugSettingsActivity : AppCompatActivity() {
     }
 
     private fun renderViewState(state: DebugSettingsViewModel.ViewState) {
-        adapter?.submitList(state.dataPoints)
+        listAdapter?.submitList(state.dataPoints)
         debug_data_points_list.visibility = state.dataPointsVisibility
         debug_data_points_error_text.visibility = state.dataPointsErrorVisibility
     }
