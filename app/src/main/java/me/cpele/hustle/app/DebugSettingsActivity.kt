@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +50,21 @@ class DebugSettingsActivity : AppCompatActivity() {
             android.R.layout.simple_spinner_dropdown_item
         )
         debug_data_points_targets_spinner.adapter = targetsAdapter
+
+        debug_data_points_targets_spinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+
+                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    viewModel.onTargetSelected(targetsAdapter.getItem(position))
+                }
+            }
 
         viewModel.viewStateData.observe(this, Observer { it.render() })
         viewModel.viewEventData.observe(this, Observer { it.unconsumed?.render() })
