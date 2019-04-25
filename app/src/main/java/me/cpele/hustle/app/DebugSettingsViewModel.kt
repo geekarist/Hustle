@@ -4,11 +4,11 @@ import android.view.View
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.cpele.hustle.domain.DataPointRepositorySupplier
-import me.cpele.hustle.domain.DataPointTarget
+import me.cpele.hustle.domain.DataPointRepository
 
 class DebugSettingsViewModel(
-    private val dataPointRepositorySupplier: DataPointRepositorySupplier
+    private val dataPointRepository: DataPointRepository,
+    private val firebaseLogin: FirebaseLogin
 ) : ViewModel() {
 
     private val _viewStateData = MutableLiveData<ViewState>()
@@ -20,7 +20,7 @@ class DebugSettingsViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val dataPoints = dataPointRepositorySupplier.get().findAll()
+                val dataPoints = dataPointRepository.findAll()
                 _viewStateData.postValue(
                     ViewState(
                         dataPoints = dataPoints,
@@ -39,9 +39,6 @@ class DebugSettingsViewModel(
         }
     }
 
-    fun onTargetSelected(target: CharSequence?) =
-        dataPointRepositorySupplier.switchTo(DataPointTarget.of(target))
-
     data class ViewState(
         val dataPoints: List<Long> = emptyList(),
         val dataPointsVisibility: Int,
@@ -53,10 +50,11 @@ class DebugSettingsViewModel(
     }
 
     class Factory(
-        private val dataPointRepositorySupplier: DataPointRepositorySupplier
+        private val dataPointRepository: DataPointRepository,
+        private val firebaseLogin: FirebaseLogin
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return modelClass.cast(DebugSettingsViewModel(dataPointRepositorySupplier)) as T
+            return modelClass.cast(DebugSettingsViewModel(dataPointRepository, firebaseLogin)) as T
         }
     }
 }

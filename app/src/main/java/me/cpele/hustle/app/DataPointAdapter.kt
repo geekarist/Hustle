@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
-class DataPointListAdapter : ListAdapter<Long, DataPointViewHolder>(ItemCallback) {
+class DataPointAdapter : ListAdapter<Long, DataPointViewHolder>(ItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataPointViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(

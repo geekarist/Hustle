@@ -2,13 +2,16 @@ package me.cpele.hustle.app
 
 import android.app.Application
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import me.cpele.hustle.domain.*
+import me.cpele.hustle.domain.DataPointRepository
+import me.cpele.hustle.domain.EggTimer
+import me.cpele.hustle.domain.SendDataPointUseCase
 
 class CustomApplication : Application() {
 
     private val androidStringProvider: EggTimer.StringProvider by lazy {
         AndroidStringProvider(this)
     }
+
     private val androidTimeFormatting: EggTimer.TimeFormatting by lazy {
         AndroidTimeFormatting()
     }
@@ -17,16 +20,8 @@ class CustomApplication : Application() {
         FirebaseLogin(this)
     }
 
-    private val stringStorage: DataPointRepositorySupplier.StringStorage by lazy {
-        SharedPreferenceStringStorage(this)
-    }
-
-    private val dataPointRepositorySupplier: DataPointRepositorySupplier by lazy {
-        DataPointRepositorySupplier(
-            stringStorage,
-            DataPointTarget.FIREBASE to AndroidFirebaseDataPointRepository(firebaseLogin),
-            DataPointTarget.IN_MEMORY to InMemoryDataPointRepository()
-        )
+    private val dataPointRepository: DataPointRepository by lazy {
+        AndroidFirebaseDataPointRepository(firebaseLogin)
     }
 
     private val eggTimerFactory: EggTimer.Factory by lazy {
@@ -37,7 +32,7 @@ class CustomApplication : Application() {
     }
 
     private val sendDataPointUseCase: SendDataPointUseCase by lazy {
-        SendDataPointUseCase(dataPointRepositorySupplier)
+        SendDataPointUseCase(dataPointRepository)
     }
 
     @ExperimentalCoroutinesApi
@@ -46,7 +41,7 @@ class CustomApplication : Application() {
     }
 
     val debugViewModelFactory by lazy {
-        DebugSettingsViewModel.Factory(dataPointRepositorySupplier)
+        DebugSettingsViewModel.Factory(dataPointRepository, firebaseLogin)
     }
 
     override fun onCreate() {

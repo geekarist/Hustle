@@ -4,9 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -24,8 +21,8 @@ class DebugSettingsActivity : AppCompatActivity() {
         }
     }
 
-    private val listAdapter by lazy {
-        debug_data_points_list.adapter as? DataPointListAdapter
+    private val adapter by lazy {
+        debug_data_points_list.adapter as? DataPointAdapter
     }
 
     private val viewModel by lazy {
@@ -40,54 +37,28 @@ class DebugSettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_debug_settings)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val listAdapter = DataPointListAdapter()
-        debug_data_points_list.adapter = listAdapter
+        val adapter = DataPointAdapter()
+        debug_data_points_list.adapter = adapter
         debug_data_points_list.layoutManager = LinearLayoutManager(this)
 
-        val targetsAdapter = ArrayAdapter.createFromResource(
-            this,
-            R.array.debug_targets,
-            android.R.layout.simple_spinner_dropdown_item
-        )
-        debug_data_points_targets_spinner.adapter = targetsAdapter
-
-        debug_data_points_targets_spinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-
-                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    viewModel.onTargetSelected(targetsAdapter.getItem(position))
-                }
-            }
-
-        viewModel.viewStateData.observe(this, Observer { it.render() })
-        viewModel.viewEventData.observe(this, Observer { it.unconsumed?.render() })
+        viewModel.viewStateData.observe(this, Observer { renderViewState(it) })
+        viewModel.viewEventData.observe(this, Observer { renderViewEvent(it.unconsumed) })
     }
 
-    private fun DebugSettingsViewModel.ViewEvent.render() {
-        when (this) {
-            is DebugSettingsViewModel.ViewEvent.Toast -> render()
+    private fun renderViewEvent(event: DebugSettingsViewModel.ViewEvent?) {
+        when (event) {
+            is DebugSettingsViewModel.ViewEvent.Toast -> Toast.makeText(
+                this,
+                event.message,
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
-    private fun DebugSettingsViewModel.ViewEvent.Toast.render() {
-        Toast.makeText(
-            this@DebugSettingsActivity,
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-    private fun DebugSettingsViewModel.ViewState.render() {
-        listAdapter?.submitList(dataPoints)
-        debug_data_points_list.visibility = dataPointsVisibility
-        debug_data_points_error_text.visibility = dataPointsErrorVisibility
+    private fun renderViewState(state: DebugSettingsViewModel.ViewState) {
+        adapter?.submitList(state.dataPoints)
+        debug_data_points_list.visibility = state.dataPointsVisibility
+        debug_data_points_error_text.visibility = state.dataPointsErrorVisibility
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean =

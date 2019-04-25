@@ -10,16 +10,8 @@
     <string name="main_sending_data_point">Sending data point: %1$s</string>
     <string name="main_data_point_sent">Data point sent: %1$s</string>
     <string name="main_debug_settings">Debug Settings</string>
-
     <string name="debug_data_points">Data Points</string>
     <string name="debug_firebase">Firebase</string>
     <string name="debug_firebase_login">Log in</string>
     <string name="debug_data_points_error">Error loading data points</string>
-    <string name="debug_target_title">Target</string>
-    <string name="debug_list">List</string>
-
-    <string-array name="debug_targets">
-        <item>In memory</item>
-        <item>Firebase</item>
-    </string-array>
 </resources>
