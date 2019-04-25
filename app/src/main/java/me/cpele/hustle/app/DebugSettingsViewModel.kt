@@ -7,8 +7,7 @@ import kotlinx.coroutines.launch
 import me.cpele.hustle.domain.DataPointRepository
 
 class DebugSettingsViewModel(
-    private val dataPointRepository: DataPointRepository,
-    private val firebaseLogin: FirebaseLogin
+    private val dataPointRepository: DataPointRepository
 ) : ViewModel() {
 
     private val _viewStateData = MutableLiveData<ViewState>()
@@ -50,11 +49,10 @@ class DebugSettingsViewModel(
     }
 
     class Factory(
-        private val dataPointRepository: DataPointRepository,
-        private val firebaseLogin: FirebaseLogin
+        private val dataPointRepository: DataPointRepository
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return modelClass.cast(DebugSettingsViewModel(dataPointRepository, firebaseLogin)) as T
+            return modelClass.cast(DebugSettingsViewModel(dataPointRepository)) as T
         }
     }
 }
