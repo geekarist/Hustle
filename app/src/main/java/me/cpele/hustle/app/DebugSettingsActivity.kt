@@ -26,10 +26,6 @@ class DebugSettingsActivity : AppCompatActivity() {
         debug_data_points_list.adapter as? DataPointListAdapter
     }
 
-    private val targetsAdapter by lazy {
-        debug_data_points_targets_spinner.adapter
-    }
-
     private val viewModel by lazy {
         ViewModelProviders.of(
             this,
