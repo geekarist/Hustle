@@ -24,7 +24,7 @@ class BeeminderLogin(private val application: Application) {
 
     private suspend fun completeLoginFlow() {
         try {
-            withTimeout(TimeUnit.SECONDS.toMillis(2)) {
+            withTimeout(TimeUnit.MINUTES.toMillis(2)) {
                 suspendCoroutine { continuation: Continuation<Unit> ->
                     tearDownReceiver()
                     receiver = object : BroadcastReceiver() {
