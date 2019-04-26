@@ -14,4 +14,5 @@
     <string name="debug_firebase">Firebase</string>
     <string name="debug_firebase_login">Log in</string>
     <string name="debug_data_points_error">Error loading data points</string>
+    <string name="beeminder_login_text">Logging in to Beeminder</string>
 </resources>

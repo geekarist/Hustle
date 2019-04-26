@@ -1,21 +1,17 @@
 package me.cpele.hustle.app
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import me.cpele.hustle.R
 import java.util.concurrent.Executors
 
 class BeeminderLoginActivity : AppCompatActivity() {
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val view = TextView(this).apply { text = "Allegedly logging in to Beeminder..." }
-        setContentView(view)
+        setContentView(R.layout.activity_beeminder_login)
 
         val executor = Executors.newSingleThreadExecutor()
         executor.submit {
