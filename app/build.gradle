@@ -3,9 +3,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+static String privProp(String name) {
+    Properties properties = new Properties()
+    properties.load(new FileReader("private/config.properties"))
+    return "\"${properties.get(name)}\""
+}
+
 android {
     compileSdkVersion 28
-
 
     defaultConfig {
         applicationId "me.cpele.hustle"
@@ -14,8 +19,12 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField('String', 'BEEMINDER_AUTH_ENDPOINT', privProp('beeminder.auth.endpoint'))
+        buildConfigField('String', 'BEEMINDER_TOKEN_ENDPOINT', privProp('beeminder.token.endpoint'))
+        buildConfigField('String', 'BEEMINDER_CLIENT_ID', privProp('beeminder.client.id'))
+        buildConfigField('String', 'BEEMINDER_REDIRECT_URI', privProp('beeminder.redirect.uri'))
 
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
