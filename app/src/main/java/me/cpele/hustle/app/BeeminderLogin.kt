@@ -14,6 +14,8 @@ import kotlin.coroutines.suspendCoroutine
 
 class BeeminderLogin(private val application: Application) {
 
+    var receiver: BroadcastReceiver? = null
+
     suspend fun ensure() {
         if (!isLoggedIn) completeLoginFlow()
     }
@@ -21,14 +23,13 @@ class BeeminderLogin(private val application: Application) {
     private val isLoggedIn: Boolean get() = false
 
     private suspend fun completeLoginFlow() {
-        var receiver: BroadcastReceiver? = null
         try {
             withTimeout(TimeUnit.SECONDS.toMillis(2)) {
                 suspendCoroutine { continuation: Continuation<Unit> ->
+                    tearDownReceiver()
                     receiver = object : BroadcastReceiver() {
                         override fun onReceive(context: Context?, intent: Intent?) {
-                            application.unregisterReceiver(this)
-                            receiver = null
+                            tearDownReceiver()
                             continuation.resume(Unit)
                         }
                     }
@@ -38,9 +39,14 @@ class BeeminderLogin(private val application: Application) {
                 }
             }
         } catch (e: TimeoutCancellationException) {
-            receiver?.let { application.unregisterReceiver(it) }
+            tearDownReceiver()
             throw e
         }
+    }
+
+    private fun tearDownReceiver() {
+        receiver?.let { application.unregisterReceiver(receiver) }
+        receiver = null
     }
 
     companion object {
