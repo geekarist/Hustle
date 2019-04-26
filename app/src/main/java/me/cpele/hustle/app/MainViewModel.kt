@@ -1,13 +1,11 @@
 package me.cpele.hustle.app
 
 import androidx.lifecycle.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import me.cpele.hustle.domain.EggTimer
 import me.cpele.hustle.domain.SendDataPointUseCase
 
-@ExperimentalCoroutinesApi
 class MainViewModel(
     eggTimerFactory: EggTimer.Factory,
     private val sendDataPointUseCase: SendDataPointUseCase
@@ -23,6 +21,7 @@ class MainViewModel(
 
     init {
         viewModelScope.launch {
+            @Suppress("EXPERIMENTAL_API_USAGE")
             for (state in eggTimer.channel) {
                 _viewStateData.postValue(
                     ViewState(
@@ -40,6 +39,7 @@ class MainViewModel(
     fun onReset() = eggTimer.reset()
 
     override fun onCleared() {
+        @Suppress("EXPERIMENTAL_API_USAGE")
         eggTimer.cancel()
         super.onCleared()
     }

@@ -1,7 +1,6 @@
 package me.cpele.hustle.app
 
 import android.app.Application
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import me.cpele.hustle.domain.DataPointRepository
 import me.cpele.hustle.domain.EggTimer
 import me.cpele.hustle.domain.SendDataPointUseCase
@@ -39,7 +38,6 @@ class CustomApplication : Application() {
         SendDataPointUseCase(dataPointRepository)
     }
 
-    @ExperimentalCoroutinesApi
     val mainViewModelFactory by lazy {
         MainViewModel.Factory(eggTimerFactory, sendDataPointUseCase)
     }
