@@ -19,7 +19,14 @@ class BeeminderLoginActivity : AppCompatActivity() {
         val path = intent?.data?.toString()
 
         if (path?.startsWith(BuildConfig.BEEMINDER_REDIRECT_URI) == true) {
-            Toast.makeText(this, "Perhaps logged in", Toast.LENGTH_SHORT).show()
+            val token = intent?.data?.getQueryParameter("access_token")
+            val userName = intent?.data?.getQueryParameter("username")
+            Toast.makeText(
+                this,
+                "Logged in as $userName, token is $token",
+                Toast.LENGTH_SHORT
+            ).show()
+            finish()
         } else {
             val uri = Uri.parse(BuildConfig.BEEMINDER_AUTH_ENDPOINT)
                 .buildUpon()
