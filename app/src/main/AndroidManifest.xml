@@ -24,8 +24,13 @@
         <activity android:name=".app.FirebaseLoginActivity" />
         <activity android:name=".app.BeeminderLoginActivity">
             <intent-filter>
-                <data android:scheme="hustle" />
-                <data android:host="redirect" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <data android:scheme="me.cpele.hustle" />
+                <data android:host="auth-redirect" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

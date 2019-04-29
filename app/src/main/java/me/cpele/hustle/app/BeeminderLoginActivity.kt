@@ -16,8 +16,10 @@ class BeeminderLoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_beeminder_login)
 
-        if (intent?.data?.scheme == "hustle" && intent?.data?.host == "redirect") {
-            Toast.makeText(this, "Logged in!", Toast.LENGTH_SHORT).show()
+        val path = intent?.data?.toString()
+
+        if (path?.startsWith(BuildConfig.BEEMINDER_REDIRECT_URI) == true) {
+            Toast.makeText(this, "Perhaps logged in", Toast.LENGTH_SHORT).show()
         } else {
             val uri = Uri.parse(BuildConfig.BEEMINDER_AUTH_ENDPOINT)
                 .buildUpon()
