@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import me.cpele.hustle.BuildConfig
@@ -21,12 +20,7 @@ class BeeminderLoginActivity : AppCompatActivity() {
         if (path?.startsWith(BuildConfig.BEEMINDER_REDIRECT_URI) == true) {
             val token = intent?.data?.getQueryParameter("access_token")
             val userName = intent?.data?.getQueryParameter("username")
-            Toast.makeText(
-                this,
-                "Logged in as $userName, token is $token",
-                Toast.LENGTH_SHORT
-            ).show()
-            finish()
+            complete(token, userName)
         } else {
             val uri = Uri.parse(BuildConfig.BEEMINDER_AUTH_ENDPOINT)
                 .buildUpon()
@@ -41,8 +35,11 @@ class BeeminderLoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun complete() {
-        sendBroadcast(Intent(ACTION_BEEMINDER_LOGIN_SUCCESS))
+    private fun complete(token: String?, userName: String?) {
+        val intent = Intent(ACTION_BEEMINDER_LOGIN_SUCCESS)
+        intent.putExtra(EXTRA_ACCESS_TOKEN, token)
+        intent.putExtra(EXTRA_USER_NAME, userName)
+        sendBroadcast(intent)
         finish()
     }
 
@@ -51,5 +48,7 @@ class BeeminderLoginActivity : AppCompatActivity() {
             context.startActivity(Intent(context, BeeminderLoginActivity::class.java))
 
         const val ACTION_BEEMINDER_LOGIN_SUCCESS = "me.cpele.hustle.ACTION_BEEMINDER_LOGIN_SUCCESS"
+        const val EXTRA_ACCESS_TOKEN = "EXTRA_ACCESS_TOKEN"
+        const val EXTRA_USER_NAME = "EXTRA_USER_NAME"
     }
 }

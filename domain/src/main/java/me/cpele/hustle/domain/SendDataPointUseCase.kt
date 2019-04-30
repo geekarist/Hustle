@@ -16,7 +16,7 @@ class SendDataPointUseCase(private val dataPointRepository: DataPointRepository)
         } catch (e: CancellationException) {
             Response("Data point sending cancelled")
         } catch (t: Throwable) {
-            Response("Error sending datapoint")
+            Response("Error sending datapoint: ${t.message}")
         }
 
     data class Response(val message: String)
