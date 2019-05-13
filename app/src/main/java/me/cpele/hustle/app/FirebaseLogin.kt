@@ -16,7 +16,7 @@ import kotlin.coroutines.resume
 
 class FirebaseLogin(private val application: Application) {
 
-    suspend fun complete() {
+    suspend fun ensure() {
         if (!isLoggedIn()) completeLoginFlow()
     }
 
