@@ -4,9 +4,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 static String privProp(String name) {
-    Properties properties = new Properties()
-    properties.load(new FileReader("private/config.properties"))
-    return "\"${properties.get(name)}\""
+    String path = "private/config.properties"
+    if (new File(path).exists()) {
+        Properties properties = new Properties()
+        properties.load(new FileReader(path))
+        return "\"${properties.get(name)}\""
+    } else {
+        return null
+    }
 }
 
 android {
