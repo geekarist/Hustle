@@ -10,7 +10,7 @@ static String privProp(String name) {
         properties.load(new FileReader(path))
         return "\"${properties.get(name)}\""
     } else {
-        return "TODO"
+        return "\"TODO\""
     }
 }
 
