@@ -8,11 +8,11 @@ import android.content.IntentFilter
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeout
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class FirebaseLogin(private val application: Application) {
 
@@ -27,7 +27,7 @@ class FirebaseLogin(private val application: Application) {
         var receiver: BroadcastReceiver? = null
         try {
             withTimeout(TimeUnit.MINUTES.toMillis(2)) {
-                suspendCancellableCoroutine { continuation: Continuation<Unit> ->
+                suspendCoroutine { continuation: Continuation<Unit> ->
                     receiver = object : BroadcastReceiver() {
                         override fun onReceive(context: Context?, intent: Intent?) {
                             Log.d(FirebaseLogin::class.java.simpleName, "Broadcast received")
