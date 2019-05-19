@@ -6,7 +6,10 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import kotlinx.coroutines.Deferred
 import me.cpele.hustle.domain.DataPointRepository
 import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 import java.util.*
 
 class BeeminderDataPointRepository(
@@ -16,17 +19,18 @@ class BeeminderDataPointRepository(
 
     private val service = Retrofit.Builder()
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .addConverterFactory(MoshiConverterFactory.create())
         .baseUrl("https://www.beeminder.com")
         .build()
         .create(Service::class.java)
 
     interface Service {
-        @POST("/api/v1/users/me/goals/{slug}/datapoints.json?auth_token={accessToken}&value={value}&comment={comment}")
+        @POST("/api/v1/users/me/goals/{slug}/datapoints.json")
         fun createDataPointAsync(
-            accessToken: String,
-            slug: String,
-            value: Long,
-            comment: String
+            @Path("slug") slug: String,
+            @Query("auth_token") accessToken: String,
+            @Query("value") value: Long,
+            @Query("comment") comment: String
         ): Deferred<DataPoint>
     }
 
@@ -35,8 +39,8 @@ class BeeminderDataPointRepository(
     override suspend fun insert(elapsedMillis: Long) {
         val authState = beeminderLogin.ensure()
         val inserted = service.createDataPointAsync(
-            authState.accessToken,
             "hustle",
+            authState.accessToken,
             elapsedMillis,
             makeComment()
         ).await()

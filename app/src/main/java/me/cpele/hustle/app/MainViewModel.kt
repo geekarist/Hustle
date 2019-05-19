@@ -1,5 +1,6 @@
 package me.cpele.hustle.app
 
+import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -52,6 +53,7 @@ class MainViewModel(
             _viewEventData.postValue(Consumable(ViewEvent.Message(response.message)))
         } catch (t: Throwable) {
             _viewEventData.postValue(Consumable(ViewEvent.Message(t.message)))
+            Log.w(javaClass.simpleName, t)
         }
     }
 
