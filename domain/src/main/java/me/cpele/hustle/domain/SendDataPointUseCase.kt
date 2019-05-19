@@ -14,10 +14,12 @@ class SendDataPointUseCase(private val dataPointRepository: DataPointRepository)
             timer.reset()
             Response("Data point sent: $elapsedMillis")
         } catch (e: CancellationException) {
-            Response("Data point sending cancelled")
+            throw Err("Data point sending cancelled", e)
         } catch (t: Throwable) {
-            Response("Error sending datapoint: ${t.message}")
+            throw Err("Error sending datapoint", t)
         }
+
+    class Err(message: String, cause: Throwable) : Exception(message, cause)
 
     data class Response(val message: String)
 }

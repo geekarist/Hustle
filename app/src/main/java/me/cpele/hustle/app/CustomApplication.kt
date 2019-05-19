@@ -24,7 +24,7 @@ class CustomApplication : Application() {
     }
 
     private val dataPointRepository: DataPointRepository by lazy {
-        BeeminderDataPointRepository(beeminderLogin)
+        BeeminderDataPointRepository(beeminderLogin, this)
 //        AndroidFirebaseDataPointRepository(firebaseLogin)
     }
 

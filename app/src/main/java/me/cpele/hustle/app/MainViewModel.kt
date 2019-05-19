@@ -47,8 +47,12 @@ class MainViewModel(
     fun onChangeDuration(hour: Int, minute: Int) = eggTimer.changeDuration(hour, minute)
 
     fun sendDataPoint() = viewModelScope.launch {
-        val response = sendDataPointUseCase.execute(eggTimer)
-        _viewEventData.postValue(Consumable(ViewEvent.Message(response.message)))
+        try {
+            val response = sendDataPointUseCase.execute(eggTimer)
+            _viewEventData.postValue(Consumable(ViewEvent.Message(response.message)))
+        } catch (t: Throwable) {
+            _viewEventData.postValue(Consumable(ViewEvent.Message(t.message)))
+        }
     }
 
     fun onClickChange() =
@@ -69,7 +73,7 @@ class MainViewModel(
     )
 
     sealed class ViewEvent {
-        data class Message(val message: String) : ViewEvent()
+        data class Message(val message: String?) : ViewEvent()
         data class PickTime(val hour: Int, val minute: Int) : ViewEvent()
     }
 
