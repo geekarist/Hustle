@@ -28,7 +28,7 @@ class BeeminderDataPointRepository(
         @POST("/api/v1/users/me/goals/{slug}/datapoints.json")
         fun createDataPointAsync(
             @Path("slug") slug: String,
-            @Query("auth_token") accessToken: String,
+            @Query("access_token") accessToken: String,
             @Query("value") value: Long,
             @Query("comment") comment: String
         ): Deferred<DataPoint>
