@@ -24,8 +24,8 @@ class CustomApplication : Application() {
     }
 
     private val dataPointRepository: DataPointRepository by lazy {
-        // BeeminderDataPointRepository(beeminderLogin)
-        AndroidFirebaseDataPointRepository(firebaseLogin)
+        BeeminderDataPointRepository(beeminderLogin)
+//        AndroidFirebaseDataPointRepository(firebaseLogin)
     }
 
     private val eggTimerFactory: EggTimer.Factory by lazy {
